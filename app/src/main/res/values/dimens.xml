@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="page_margin">100dp</dimen>
+    <dimen name="page_img_margin">200dp</dimen>
+    <dimen name="bottom_nav_bar">80dp</dimen>
+    <dimen name="bottom_nav_bar_padding">16dp</dimen>
+</resources>
