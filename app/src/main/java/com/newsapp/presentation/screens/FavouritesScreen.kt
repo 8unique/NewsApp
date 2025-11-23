@@ -2,152 +2,231 @@ package com.newsapp.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.newsapp.R
+import com.newsapp.domain.model.Article
 import com.newsapp.presentation.components.BottomBar
-import com.newsapp.presentation.viewmodels.LoginViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import com.newsapp.presentation.navigation.Screen
+import com.newsapp.presentation.viewmodels.FavouritesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavouritesScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    onNavigateToFavourites: () -> Unit
+    viewModel: FavouritesViewModel = koinViewModel(),
+    navController: NavController
 ) {
-    val scrollState = rememberScrollState()
+    val favoriteArticles by viewModel.favoriteArticles.collectAsState(initial = emptyList())
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background))
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 120.dp),
+            contentPadding = PaddingValues(top = 20.dp, bottom = 20.dp)
+        ) {
+            item {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = dimensionResource(R.dimen.page_margin))
+                        .padding(bottom = 20.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = colorResource(R.color.text_color),
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { navController.popBackStack() }
+                    )
+
+                    Text(
+                        text = "Favourites",
+                        color = colorResource(R.color.light_blue),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 32.sp
+                    )
+
+                    Spacer(modifier = Modifier.size(24.dp))
+                }
+            }
+
+            if (favoriteArticles.isEmpty()) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "No favorite articles yet",
+                                color = colorResource(R.color.text_color),
+                                fontSize = 16.sp,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                            Text(
+                                text = "Start adding articles to your favorites!",
+                                color = colorResource(R.color.text_color2),
+                                fontSize = 14.sp
+                            )
+                        }
+                    }
+                }
+            } else {
+                items(favoriteArticles) { article ->
+                    FavoriteArticleItem(
+                        article = article,
+                        onClick = {
+                            navController.navigate(Screen.ArticleDetail.createRoute(article.url))
+                        }
+                    )
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            BottomBar(
+                navController = navController
+            )
+        }
+    }
+}
+
+@Composable
+fun FavoriteArticleItem(
+    article: Article,
+    onClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
-    val fullText = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"
+    val maxChars = 150
 
-    val maxChars = 300
+    val description = article.description ?: article.content ?: "No description available"
 
-    val displayText = if (expanded && fullText.length > maxChars) {
+    val displayText = if (expanded) {
         buildAnnotatedString {
-            append(fullText)
-
-            append("... ")
+            append(description)
+            append(" ")
             pushStringAnnotation(tag = "SHOW_LESS", annotation = "show_less")
-            withStyle(style = SpanStyle(color = colorResource(R.color.light_blue))) {
+            withStyle(style = SpanStyle(color = Color(0xFF00BCD4))) {
                 append("Show Less")
             }
             pop()
         }
     } else {
         buildAnnotatedString {
-            val short = fullText.take(maxChars) + "..."
+            val short = if (description.length > maxChars) {
+                description.take(maxChars) + "..."
+            } else {
+                description
+            }
             append(short)
 
-            pushStringAnnotation(tag = "READ_MORE", annotation = "read_more")
-            withStyle(style = SpanStyle(color = colorResource(R.color.light_blue))) {
-                append(" Read More")
+            if (description.length > maxChars) {
+                append(" ")
+                pushStringAnnotation(tag = "READ_MORE", annotation = "read_more")
+                withStyle(style = SpanStyle(color = Color(0xFF00BCD4))) {
+                    append("Read More")
+                }
+                pop()
             }
-            pop()
         }
     }
 
-
-
-    val loginState by viewModel.loginState.collectAsState()
-
-    val navController = rememberNavController()
-
-    LaunchedEffect(loginState)
-    {
-        if (loginState is LoginState.Success) {
-            onNavigateToFavourites()
-        }
-    }
-
-    Scaffold(
-    modifier = Modifier.fillMaxSize()
-    )
-    {
-        paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.background))
-                .padding(paddingValues)
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = dimensionResource(R.dimen.page_margin))
+            .padding(bottom = 16.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = article.urlToImage ?: R.drawable.profile_img
+                ),
+                contentDescription = article.title,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.TopCenter)
-                    .padding(bottom = 20.dp, top = 20.dp)
-            ) {
-                Text(
-                    text = "Favourites",
-                    color = colorResource(R.color.light_blue),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 32.sp
-                )
-            }
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)),
+                contentScale = ContentScale.Crop
+            )
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(top = 50.dp, bottom = 150.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
+                Text(
+                    text = article.sourceName,
+                    color = colorResource(R.color.text_color),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
 
-                Image(
-                    painter = painterResource(id = R.drawable.profile_img),
-                    contentDescription = "article image",
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                        .padding(horizontal = dimensionResource(R.dimen.page_img_margin))
-                        .height(200.dp)
-                        .width(500.dp)
-                        .clip(RoundedCornerShape(5)),
-                    contentScale = ContentScale.Crop
+                Text(
+                    text = article.title,
+                    color = colorResource(R.color.text_color3),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    maxLines = 2
                 )
 
                 ClickableText(
                     text = displayText,
-                    modifier = Modifier
-                        .padding(top = 50.dp)
-                        .padding(horizontal = dimensionResource(R.dimen.page_margin)),
                     style = androidx.compose.ui.text.TextStyle(
-                        color = colorResource(R.color.black),
-                        fontSize = 18.sp
+                        color = colorResource(R.color.text_color),
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp
                     )
                 ) { offset ->
                     displayText.getStringAnnotations(
@@ -166,20 +245,6 @@ fun FavouritesScreen(
                         expanded = false
                     }
                 }
-
-
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            ) {
-                BottomBar(
-                    navController = navController
-                )
             }
         }
     }

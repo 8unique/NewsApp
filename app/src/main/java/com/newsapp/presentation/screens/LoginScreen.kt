@@ -1,7 +1,6 @@
 package com.newsapp.presentation.screens
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,8 +58,9 @@ import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.layout.ContentScale
 import com.newsapp.R
+import com.newsapp.presentation.screens.uistates.LoginUiState
 import com.newsapp.presentation.viewmodels.LoginViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -78,10 +77,10 @@ fun LoginScreen(
     var passwordError by remember { mutableStateOf(false) }
     val passwordFocus = remember { FocusRequester() }
 
-    val loginState by viewModel.loginState.collectAsState()
+    val loginState by viewModel.loginUiState.collectAsState()
 
     LaunchedEffect(loginState) {
-        if (loginState is LoginState.Success) {
+        if (loginState is LoginUiState.Success) {
             onNavigateToLogin()
         }
     }
@@ -149,9 +148,9 @@ fun LoginScreen(
                         containerColor = colorResource(R.color.light_blue)
                     ),
                     shape = RoundedCornerShape(50.dp),
-                    enabled = loginState !is LoginState.Loading
+                    enabled = loginState !is LoginUiState.Loading
                 ) {
-                    if (loginState is LoginState.Loading) {
+                    if (loginState is LoginUiState.Loading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
                             color = Color.White
@@ -165,9 +164,9 @@ fun LoginScreen(
                     }
                 }
 
-                if (loginState is LoginState.Error) {
+                if (loginState is LoginUiState.Error) {
                     Text(
-                        text = (loginState as LoginState.Error).message,
+                        text = (loginState as LoginUiState.Error).message,
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(top = 16.dp)
                     )

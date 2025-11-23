@@ -3,7 +3,7 @@ package com.newsapp.presentation.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.newsapp.domain.usecase.LoginUseCase
-import com.newsapp.presentation.screens.LoginState
+import com.newsapp.presentation.screens.uistates.LoginUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,23 +13,23 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase
 ) : ViewModel() {
 
-    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
-    val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
+    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Idle)
+    val loginUiState: StateFlow<LoginUiState> = _loginUiState.asStateFlow()
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            _loginState.value = LoginState.Loading
+            _loginUiState.value = LoginUiState.Loading
             try {
                 val result = loginUseCase(email, password)
                 if (result.isSuccess) {
-                    _loginState.value = LoginState.Success
+                    _loginUiState.value = LoginUiState.Success
                 } else {
-                    _loginState.value = LoginState.Error(
+                    _loginUiState.value = LoginUiState.Error(
                         result.exceptionOrNull()?.message ?: "Login failed"
                     )
                 }
             } catch (e: Exception) {
-                _loginState.value = LoginState.Error(e.message ?: "Unknown error")
+                _loginUiState.value = LoginUiState.Error(e.message ?: "Unknown error")
             }
         }
     }

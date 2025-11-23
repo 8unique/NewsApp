@@ -38,33 +38,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.newsapp.R
 import com.newsapp.presentation.components.BottomBar
 import com.newsapp.presentation.viewmodels.LoginViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun ProfileScreen(
-    viewModel: LoginViewModel = koinViewModel(),
-    onNavigateToProfile: () -> Unit
+    navController: NavController
 ) {
     val scrollState = rememberScrollState()
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
 
-
-    val loginState by viewModel.loginState.collectAsState()
-
-    val navController = rememberNavController()
-
-    LaunchedEffect(loginState) {
-        if (loginState is LoginState.Success) {
-            onNavigateToProfile()
-        }
-    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize()

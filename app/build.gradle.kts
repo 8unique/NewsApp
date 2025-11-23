@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
 }
 
 android {
@@ -56,10 +57,34 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.9.6")
 
 
+    // Compose
+    implementation("androidx.compose.ui:ui:1.5.4")
+    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.navigation:navigation-compose:2.7.5")
+
     // Koin DI
-    implementation("io.insert-koin:koin-android:4.1.1")
-    implementation("io.insert-koin:koin-androidx-compose:4.1.1")
-    implementation(libs.androidx.compose.foundation)
+    implementation("io.insert-koin:koin-android:3.5.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // Room
+    implementation("androidx.room:room-runtime:2.6.0")
+    implementation("androidx.room:room-ktx:2.6.0")
+    kapt("androidx.room:room-compiler:2.6.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Paging
+    implementation("androidx.paging:paging-runtime:3.2.1")
+    implementation("androidx.paging:paging-compose:3.2.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

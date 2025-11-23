@@ -4,14 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,33 +22,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.newsapp.R
 import com.newsapp.presentation.navigation.BottomBarNav
 
-
 @Composable
 fun BottomBar(navController: NavController) {
     val bottomNavItems = listOf(
-        BottomBarNav.HomeScreen, BottomBarNav.FavouriteScreen, BottomBarNav.ProfileScreen
+        BottomBarNav.HomeScreen,
+        BottomBarNav.FavouriteScreen,
+        BottomBarNav.ProfileScreen
     )
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
 
     Box(
         modifier = Modifier
@@ -62,7 +52,6 @@ fun BottomBar(navController: NavController) {
             .padding(bottom = 20.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,21 +105,20 @@ fun BottomBar(navController: NavController) {
                     )
                 }
         ) {
-
             NavigationBar(
                 modifier = Modifier
-                    .fillMaxWidth().padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
                     .height(dimensionResource(id = R.dimen.bottom_nav_bar)),
                 containerColor = Color.Transparent
             ) {
                 bottomNavItems.forEach { item ->
-
                     NavigationBarItem(
                         selected = currentRoute == item.route,
                         onClick = {
                             if (currentRoute != item.route) {
                                 navController.navigate(item.route) {
-                                    popUpTo(navController.graph.findStartDestination().id) {
+                                    popUpTo(BottomBarNav.HomeScreen.route) {
                                         saveState = true
                                     }
                                     launchSingleTop = true
@@ -144,8 +132,6 @@ fun BottomBar(navController: NavController) {
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 verticalArrangement = Arrangement.Center
                             ) {
-
-
                                 if (currentRoute == item.route) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.navbar_line),
@@ -172,6 +158,7 @@ fun BottomBar(navController: NavController) {
                                 )
                             }
                         },
+                        label = null,
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = colorResource(R.color.light_blue),
                             unselectedIconColor = colorResource(R.color.bottom_navbar_icon_unselected),
@@ -182,7 +169,6 @@ fun BottomBar(navController: NavController) {
                     )
                 }
             }
-
         }
     }
 }

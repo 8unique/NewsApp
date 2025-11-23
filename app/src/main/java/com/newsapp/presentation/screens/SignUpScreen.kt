@@ -23,8 +23,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -56,8 +54,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.rememberNavController
 import com.newsapp.R
 import com.newsapp.presentation.components.BottomBar
+import com.newsapp.presentation.screens.uistates.LoginUiState
 import com.newsapp.presentation.viewmodels.LoginViewModel
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -88,12 +87,12 @@ fun SignUpScreen(
     var confirmPasswordError by remember { mutableStateOf(false) }
     val confirmPasswordFocus = remember { FocusRequester() }
 
-    val loginState by viewModel.loginState.collectAsState()
+    val loginState by viewModel.loginUiState.collectAsState()
 
     val navController = rememberNavController()
 
     LaunchedEffect(loginState) {
-        if (loginState is LoginState.Success) {
+        if (loginState is LoginUiState.Success) {
             onNavigateToSignUp()
         }
     }
@@ -195,9 +194,9 @@ fun SignUpScreen(
                         containerColor = colorResource(R.color.light_blue)
                     ),
                     shape = RoundedCornerShape(50.dp),
-                    enabled = loginState !is LoginState.Loading
+                    enabled = loginState !is LoginUiState.Loading
                 ) {
-                    if (loginState is LoginState.Loading) {
+                    if (loginState is LoginUiState.Loading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(24.dp),
                             color = Color.White
@@ -211,9 +210,9 @@ fun SignUpScreen(
                     }
                 }
 
-                if (loginState is LoginState.Error) {
+                if (loginState is LoginUiState.Error) {
                     Text(
-                        text = (loginState as LoginState.Error).message,
+                        text = (loginState as LoginUiState.Error).message,
                         color = MaterialTheme.colorScheme.error,
                         modifier = Modifier.padding(top = 16.dp)
                     )
