@@ -1,79 +1,45 @@
 package com.newsapp.presentation.screens
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import com.newsapp.R
-import com.newsapp.presentation.components.BottomBar
+import com.newsapp.presentation.navigation.BottomBarNav
+import com.newsapp.presentation.navigation.OnboardingNav
 import com.newsapp.presentation.screens.uistates.LoginUiState
 import com.newsapp.presentation.viewmodels.LoginViewModel
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
 fun SignUpScreen(
     viewModel: LoginViewModel = koinViewModel(),
-    onNavigateToSignUp: () -> Unit
+    navController: NavController
 ) {
     val scrollState = rememberScrollState()
     var firstName by remember { mutableStateOf("") }
     var firstNameError by remember { mutableStateOf(false) }
     val firstNameFocus = remember { FocusRequester() }
 
-
     var lastName by remember { mutableStateOf("") }
     var lastNameError by remember { mutableStateOf(false) }
     val lastNameFocus = remember { FocusRequester() }
-
 
     var email by remember { mutableStateOf("") }
     var emailError by remember { mutableStateOf(false) }
@@ -89,265 +55,189 @@ fun SignUpScreen(
 
     val loginState by viewModel.loginUiState.collectAsState()
 
-    val navController = rememberNavController()
-
     LaunchedEffect(loginState) {
         if (loginState is LoginUiState.Success) {
-            onNavigateToSignUp()
+            navController.navigate(BottomBarNav.HomeScreen.route) {
+                popUpTo(OnboardingNav.SignUpScreen.route) { inclusive = true }
+            }
         }
     }
-
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colorResource(R.color.background))
-                .padding(paddingValues)
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(top = 50.dp, bottom = 150.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                FloatingLabelText(
-                    value = firstName,
-                    onValueChange = {
-                        firstName = it
-                        if (it.isNotBlank()) firstNameError = false
-                    },
-                    label = "First Name",
-                    isError = firstNameError,
-                    isPassword = false,
-                    focusRequester = firstNameFocus
-                )
-
-
-                FloatingLabelText(
-                    value = lastName,
-                    onValueChange = {
-                        lastName = it
-                        if (it.isNotBlank()) lastNameError = false
-                    },
-                    label = "Last Name",
-                    isError = lastNameError,
-                    isPassword = false,
-                    focusRequester = lastNameFocus
-                )
-
-
-                FloatingLabelText(
-                    value = email,
-                    onValueChange = {
-                        email = it
-                        if (it.isNotBlank()) emailError = false
-                    },
-                    label = "Email",
-                    isError = emailError,
-                    isPassword = false,
-                    focusRequester = emailFocus
-                )
-
-                FloatingLabelText(
-                    value = password,
-                    onValueChange = {
-                        password = it
-                        if (it.isNotBlank()) passwordError = false
-                    },
-                    label = "Password",
-                    isError = passwordError,
-                    isPassword = true,
-                    focusRequester = passwordFocus
-                )
-
-
-
-                FloatingLabelText(
-                    value = confirmPassword,
-                    onValueChange = {
-                        confirmPassword = it
-                        if (it.isNotBlank()) confirmPasswordError = false
-                    },
-                    label = "Confirm Password",
-                    isError = confirmPasswordError,
-                    isPassword = true,
-                    focusRequester = confirmPasswordFocus
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-
-                Button(
-                    onClick = {
-
-                    },
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(76.dp)
-                        .padding(top = 30.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(R.color.light_blue)
-                    ),
-                    shape = RoundedCornerShape(50.dp),
-                    enabled = loginState !is LoginUiState.Loading
-                ) {
-                    if (loginState is LoginUiState.Loading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = Color.White
-                        )
-                    } else {
-                        Text(
-                            text = "Sign Up",
-                            style = TextStyle(fontSize = 16.sp),
-                            color = colorResource(R.color.white)
-                        )
-                    }
-                }
-
-                if (loginState is LoginUiState.Error) {
-                    Text(
-                        text = (loginState as LoginUiState.Error).message,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                }
-
-            }
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 20.dp)
-            ) {
-                Text(
-                    text = "Already have an account? ",
-                    color = colorResource(R.color.text_color)
-                )
-                Text(
-                    text = "Login",
-                    color = colorResource(R.color.light_blue)
-                )
-            }
-
-
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            ) {
-                BottomBar(
-                    navController = navController
-                )
-            }
-
-
-        }
-    }
-}
-
-
-
-@Composable
-private fun FloatingLabelText(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    isError: Boolean = false,
-    isPassword: Boolean = false,
-    focusRequester: FocusRequester = remember { FocusRequester() },
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused by interactionSource.collectIsFocusedAsState()
-    val hasText = value.isNotEmpty()
-
-    val labelFraction by animateFloatAsState(
-        targetValue = if (isFocused || hasText) 1f else 0f,
-        label = "labelTransition"
-    )
 
     Box(
         modifier = Modifier
-            .width(350.dp)
-            .padding(top = 15.dp)
+            .fillMaxSize()
+            .background(colorResource(R.color.background))
     ) {
-
-        Text(
-            text = label,
-            fontSize = lerp(16.sp, 12.sp, labelFraction),
-            color = if (isError) Color.Red else colorResource(R.color.text_color),
+        Column(
             modifier = Modifier
-                .offset(y = lerp(40.dp, (-8).dp, labelFraction))
-                .padding(start = 35.dp)
-                .background(
-                    color = if (isFocused || hasText) colorResource(R.color.background) else Color.Transparent,
-                    shape = RoundedCornerShape(4.dp)
-                )
-        )
-
-
-        Row(
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-                .border(
-                    width = 1.dp,
-                    color = if (isError) {
-                        Color.Red
-                    } else if (isFocused) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.outline
-                    },
-                    shape = RoundedCornerShape(50.dp)
-                )
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                singleLine = true,
+            Row(
                 modifier = Modifier
-                    .height(35.dp)
-                    .weight(1f)
-                    .focusRequester(focusRequester),
-
-                visualTransformation = if (isPassword) {
-                    PasswordVisualTransformation()
-                } else {
-                    VisualTransformation.None
-                },
-                textStyle = TextStyle(
-                    fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground
-                ),
-                interactionSource = interactionSource,
-                cursorBrush = SolidColor(MaterialTheme.colorScheme.surfaceVariant)
-            )
-
-            if (hasText) {
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(
-                    onClick = { onValueChange("") },
-                    modifier = Modifier.size(24.dp)
+                    onClick = {
+                        viewModel.resetState()
+                        navController.popBackStack()
+                    }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Clear,
-                        contentDescription = "Clear field",
-                        tint = MaterialTheme.colorScheme.outline,
-                        modifier = Modifier.size(20.dp)
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = colorResource(R.color.text_color2)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = "Sign Up",
+                    color = colorResource(R.color.light_blue),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            AuthTextField(
+                value = firstName,
+                onValueChange = {
+                    firstName = it
+                    if (it.isNotBlank()) firstNameError = false
+                },
+                label = "First Name",
+                isError = firstNameError,
+                isPassword = false,
+                focusRequester = firstNameFocus
+            )
+
+            AuthTextField(
+                value = lastName,
+                onValueChange = {
+                    lastName = it
+                    if (it.isNotBlank()) lastNameError = false
+                },
+                label = "Last Name",
+                isError = lastNameError,
+                isPassword = false,
+                focusRequester = lastNameFocus
+            )
+
+            AuthTextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                    if (it.isNotBlank()) emailError = false
+                },
+                label = "Email",
+                isError = emailError,
+                isPassword = false,
+                focusRequester = emailFocus
+            )
+
+            AuthTextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                    if (it.isNotBlank()) passwordError = false
+                },
+                label = "Password",
+                isError = passwordError,
+                isPassword = true,
+                focusRequester = passwordFocus
+            )
+
+            AuthTextField(
+                value = confirmPassword,
+                onValueChange = {
+                    confirmPassword = it
+                    if (it.isNotBlank()) confirmPasswordError = false
+                },
+                label = "Confirm Password",
+                isError = confirmPasswordError,
+                isPassword = true,
+                focusRequester = confirmPasswordFocus
+            )
+
+            Button(
+                onClick = {
+                    when {
+                        firstName.isBlank() -> firstNameError = true
+                        lastName.isBlank() -> lastNameError = true
+                        email.isBlank() -> emailError = true
+                        password.isBlank() -> passwordError = true
+                        confirmPassword.isBlank() -> confirmPasswordError = true
+                        password != confirmPassword -> {
+                            confirmPasswordError = true
+                        }
+                        else -> viewModel.signUp(firstName, lastName, email, password)
+                    }
+                },
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(76.dp)
+                    .padding(top = 30.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.light_blue)
+                ),
+                shape = RoundedCornerShape(50.dp),
+                enabled = loginState !is LoginUiState.Loading
+            ) {
+                if (loginState is LoginUiState.Loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = colorResource(R.color.light_blue)
+                    )
+                } else {
+                    Text(
+                        text = "Sign Up",
+                        style = TextStyle(fontSize = 16.sp),
+                        color = colorResource(R.color.text_color2)
                     )
                 }
             }
+
+            if (loginState is LoginUiState.Error) {
+                Text(
+                    text = (loginState as LoginUiState.Error).message,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 16.dp),
+                    fontSize = 14.sp
+                )
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 40.dp)
+        ) {
+            Text(
+                text = "Already have an account? ",
+                color = colorResource(R.color.text_color),
+                fontSize = 14.sp
+            )
+            Text(
+                text = "Login",
+                color = colorResource(R.color.light_blue),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.clickable {
+                    viewModel.resetState()
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

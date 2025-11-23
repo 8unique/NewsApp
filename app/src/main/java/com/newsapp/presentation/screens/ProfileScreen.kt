@@ -19,11 +19,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,90 +36,84 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.newsapp.R
+import com.newsapp.domain.usecase.GetCurrentUserUseCase
 import com.newsapp.presentation.components.BottomBar
-import com.newsapp.presentation.viewmodels.LoginViewModel
-import org.koin.androidx.compose.koinViewModel
-
+import org.koin.compose.koinInject
 
 @Composable
 fun ProfileScreen(
     navController: NavController
 ) {
     val scrollState = rememberScrollState()
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
+    val getCurrentUserUseCase: GetCurrentUserUseCase = koinInject()
+    val currentUser = getCurrentUserUseCase()
 
+    var firstName by remember { mutableStateOf(currentUser?.firstName ?: "Guest") }
+    var lastName by remember { mutableStateOf(currentUser?.lastName ?: "User") }
+    var email by remember { mutableStateOf(currentUser?.email ?: "guest@example.com") }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { paddingValues ->
-        Box(
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background))
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colorResource(R.color.background))
-                .padding(paddingValues)
+                .verticalScroll(scrollState)
+                .padding(top = 50.dp, bottom = 150.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(top = 50.dp, bottom = 150.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                ) {
-                    Text(
-                        text = "Profile",
-                        color = colorResource(R.color.light_blue),
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Image(
-                    painter = painterResource(id = R.drawable.profile_img),
-                    contentDescription = "profile image",
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-
-                FloatingLabelText(
-                    value = firstName,
-                    label = "First Name"
-                )
-                FloatingLabelText(
-                    value = lastName,
-                    label = "Last Name"
-                )
-                FloatingLabelText(
-                    value = email,
-                    label = "Email"
-                )
-
-            }
-
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 20.dp)
             ) {
-                BottomBar(
-                    navController = navController
+                Text(
+                    text = "Profile",
+                    color = colorResource(R.color.light_blue),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
                 )
             }
+
+            Image(
+                painter = painterResource(id = R.drawable.profile_img),
+                contentDescription = "profile image",
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+
+            FloatingLabelText(
+                value = firstName,
+                label = "First Name"
+            )
+
+            FloatingLabelText(
+                value = lastName,
+                label = "Last Name"
+            )
+
+            FloatingLabelText(
+                value = email,
+                label = "Email"
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            BottomBar(navController = navController)
         }
     }
 }
@@ -132,7 +123,6 @@ fun FloatingLabelText(
     value: String,
     label: String
 ) {
-
     Box(
         modifier = Modifier
             .width(350.dp)
@@ -146,11 +136,12 @@ fun FloatingLabelText(
                 .offset(y = (-8).dp)
                 .padding(start = 35.dp)
                 .background(
-                    color = Color.Transparent,
+                    color = colorResource(R.color.background),
                     shape = RoundedCornerShape(4.dp)
                 )
                 .padding(horizontal = 4.dp)
         )
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -165,7 +156,7 @@ fun FloatingLabelText(
                 .height(35.dp)
         ) {
             Text(
-                text = value,
+                text = value.ifEmpty { "-" },
                 fontSize = 16.sp,
                 color = if (value.isEmpty())
                     MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)

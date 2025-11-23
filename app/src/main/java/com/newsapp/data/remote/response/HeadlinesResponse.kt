@@ -3,10 +3,10 @@ package com.newsapp.data.remote.response
 data class HeadlinesResponse(
     val status: String?,
     val totalResults: Int?,
-    val articles: List<ArticleDto>?
+    val articles: List<Article>?
 ) {
-    data class ArticleDto(
-        val source: SourceDto?,
+    data class Article(
+        val source: Source?,
         val author: String?,
         val title: String?,
         val description: String?,
@@ -16,7 +16,7 @@ data class HeadlinesResponse(
         val content: String?
     )
 
-    data class SourceDto(
+    data class Source(
         val id: String?,
         val name: String?
     )

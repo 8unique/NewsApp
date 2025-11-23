@@ -9,18 +9,28 @@ import androidx.navigation.navArgument
 import com.newsapp.presentation.screens.ArticleScreen
 import com.newsapp.presentation.screens.FavouritesScreen
 import com.newsapp.presentation.screens.HomeScreen
+import com.newsapp.presentation.screens.LoginScreen
 import com.newsapp.presentation.screens.ProfileScreen
+import com.newsapp.presentation.screens.SignUpScreen
 import java.net.URLDecoder
-import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+
 
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarNav.HomeScreen.route
+        startDestination = OnboardingNav.LoginScreen.route
     ) {
+        composable(route = OnboardingNav.LoginScreen.route) {
+            LoginScreen(navController = navController)
+        }
+
+        composable(route = OnboardingNav.SignUpScreen.route) {
+            SignUpScreen(navController = navController)
+        }
+
         composable(route = BottomBarNav.HomeScreen.route) {
             HomeScreen(navController = navController)
         }
@@ -34,7 +44,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Screen.ArticleDetail.route,
+            route = HomeScreenNav.ArticleDetail.route,
             arguments = listOf(
                 navArgument("articleUrl") { type = NavType.StringType }
             )
@@ -45,15 +55,6 @@ fun NavGraph(navController: NavHostController) {
                 articleUrl = articleUrl,
                 navController = navController
             )
-        }
-    }
-}
-
-sealed class Screen(val route: String) {
-    object ArticleDetail : Screen("article_detail/{articleUrl}") {
-        fun createRoute(articleUrl: String): String {
-            val encodedUrl = URLEncoder.encode(articleUrl, StandardCharsets.UTF_8.toString())
-            return "article_detail/$encodedUrl"
         }
     }
 }

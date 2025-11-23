@@ -4,7 +4,7 @@ import com.newsapp.data.local.entity.ArticleEntity
 import com.newsapp.data.remote.response.HeadlinesResponse
 import com.newsapp.domain.model.Article
 
-fun HeadlinesResponse.ArticleDto.toEntity(category: String = "general"): ArticleEntity {
+fun HeadlinesResponse.Article.toEntity(category: String = "general"): ArticleEntity {
     return ArticleEntity(
         url = this.url ?: "",
         sourceName = this.source?.name ?: "Unknown",
@@ -34,7 +34,7 @@ fun ArticleEntity.toDomain(): Article {
     )
 }
 
-fun HeadlinesResponse.ArticleDto.toDomainDirect(): Article {
+fun HeadlinesResponse.Article.toDomainDirect(): Article {
     return Article(
         url = this.url ?: "",
         sourceName = this.source?.name ?: "Unknown",

@@ -58,7 +58,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.newsapp.R
 import com.newsapp.domain.model.Article
 import com.newsapp.presentation.components.BottomBar
-import com.newsapp.presentation.navigation.Screen
+import com.newsapp.presentation.navigation.HomeScreenNav
 import com.newsapp.presentation.viewmodels.HomeViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -172,7 +172,7 @@ fun HomeScreen(
                     NewsArticleCard(
                         article = article,
                         onClick = {
-                            navController.navigate(Screen.ArticleDetail.createRoute(article.url))
+                            navController.navigate(HomeScreenNav.ArticleDetail.createRoute(article.url))
                         }
                     )
                 }

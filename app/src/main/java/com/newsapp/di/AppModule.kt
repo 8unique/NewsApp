@@ -1,6 +1,7 @@
 package com.newsapp.di
 
 import androidx.room.Room
+import com.newsapp.data.local.SharedPreferences
 import com.newsapp.data.local.database.DataBase
 import com.newsapp.data.remote.ApiInterface
 import com.newsapp.data.repository.RepositoryImpl
@@ -9,6 +10,7 @@ import com.newsapp.domain.usecase.*
 import com.newsapp.presentation.viewmodels.ArticleViewModel
 import com.newsapp.presentation.viewmodels.FavouritesViewModel
 import com.newsapp.presentation.viewmodels.HomeViewModel
+import com.newsapp.presentation.viewmodels.LoginViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -29,6 +31,8 @@ val appModule = module {
     }
 
     single { get<DataBase>().newsDao() }
+    single { get<DataBase>().userDao() }
+    single { SharedPreferences(androidContext()) }
 
     single {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -60,6 +64,8 @@ val appModule = module {
         RepositoryImpl(
             apiService = get(),
             newsDao = get(),
+            userDao = get(),
+            sharedPreferences = get(),
             apiKey = get()
         )
     }
@@ -68,8 +74,19 @@ val appModule = module {
     factory { SearchUseCase(get()) }
     factory { GetCachedArticlesUseCase(get()) }
     factory { FavoriteUseCase(get()) }
-    factory { GetArticleUseCase(repository = get()) }
-    factory { GetFavoriteArticlesUseCase(repository = get()) }
+    factory { GetArticleUseCase( get()) }
+    factory { GetFavoriteArticlesUseCase(get()) }
+    factory { IsLoggedInUseCase(get()) }
+    factory { LoginUseCase(get()) }
+    factory { SignUpUseCase(get()) }
+    factory { GetCurrentUserUseCase(get()) }
+
+    viewModel {
+        LoginViewModel(
+            loginUseCase = get(),
+            signUpUseCase = get()
+        )
+    }
 
     viewModel {
         HomeViewModel(
