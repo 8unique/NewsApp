@@ -58,7 +58,7 @@ val appModule = module {
         get<Retrofit>().create(ApiInterface::class.java)
     }
 
-    single { "8b28af9fc9794709a28d54ee82e87d8e" }
+    single { "8b28af9fc9794709a28d54ee82e87d8e" } // api key
 
     single<Repository> {
         RepositoryImpl(

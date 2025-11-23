@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.newsapp.domain.usecase.IsLoggedInUseCase
 import com.newsapp.presentation.screens.ArticleScreen
 import com.newsapp.presentation.screens.FavouritesScreen
 import com.newsapp.presentation.screens.HomeScreen
@@ -14,14 +15,22 @@ import com.newsapp.presentation.screens.ProfileScreen
 import com.newsapp.presentation.screens.SignUpScreen
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-
-
+import org.koin.androidx.compose.get
 
 @Composable
 fun NavGraph(navController: NavHostController) {
+
+    val isLoggedInUseCase: IsLoggedInUseCase = get()
+
+    val startDestination = if (isLoggedInUseCase()) {
+        BottomBarNav.HomeScreen.route
+    } else {
+        OnboardingNav.LoginScreen.route
+    }
+
     NavHost(
         navController = navController,
-        startDestination = OnboardingNav.LoginScreen.route
+        startDestination = startDestination
     ) {
         composable(route = OnboardingNav.LoginScreen.route) {
             LoginScreen(navController = navController)
