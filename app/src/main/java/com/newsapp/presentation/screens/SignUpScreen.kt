@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -90,7 +91,7 @@ fun SignUpScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.signup_screen_back),
                         tint = colorResource(R.color.text_color2)
                     )
                 }
@@ -98,7 +99,7 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "Sign Up",
+                    text = stringResource(R.string.signup_screen_signup),
                     color = colorResource(R.color.light_blue),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -113,7 +114,7 @@ fun SignUpScreen(
                     firstName = it
                     if (it.isNotBlank()) firstNameError = false
                 },
-                label = "First Name",
+                label = stringResource(R.string.signup_screen_first_name),
                 isError = firstNameError,
                 isPassword = false,
                 focusRequester = firstNameFocus
@@ -125,7 +126,7 @@ fun SignUpScreen(
                     lastName = it
                     if (it.isNotBlank()) lastNameError = false
                 },
-                label = "Last Name",
+                label = stringResource(R.string.signup_screen_last_name),
                 isError = lastNameError,
                 isPassword = false,
                 focusRequester = lastNameFocus
@@ -137,7 +138,7 @@ fun SignUpScreen(
                     email = it
                     if (it.isNotBlank()) emailError = false
                 },
-                label = "Email",
+                label = stringResource(R.string.signup_screen_email),
                 isError = emailError,
                 isPassword = false,
                 focusRequester = emailFocus
@@ -149,7 +150,7 @@ fun SignUpScreen(
                     password = it
                     if (it.isNotBlank()) passwordError = false
                 },
-                label = "Password",
+                label = stringResource(R.string.signup_screen_password),
                 isError = passwordError,
                 isPassword = true,
                 focusRequester = passwordFocus
@@ -161,7 +162,7 @@ fun SignUpScreen(
                     confirmPassword = it
                     if (it.isNotBlank()) confirmPasswordError = false
                 },
-                label = "Confirm Password",
+                label = stringResource(R.string.signup_screen_confirm_password),
                 isError = confirmPasswordError,
                 isPassword = true,
                 focusRequester = confirmPasswordFocus
@@ -198,7 +199,7 @@ fun SignUpScreen(
                     )
                 } else {
                     Text(
-                        text = "Sign Up",
+                        text = stringResource(R.string.signup_screen_signup),
                         style = TextStyle(fontSize = 16.sp),
                         color = colorResource(R.color.text_color2)
                     )
@@ -224,12 +225,12 @@ fun SignUpScreen(
                 .padding(bottom = 40.dp)
         ) {
             Text(
-                text = "Already have an account? ",
+                text = stringResource(R.string.signup_screen_already_have_an_account),
                 color = colorResource(R.color.text_color),
                 fontSize = 14.sp
             )
             Text(
-                text = "Login",
+                text = stringResource(R.string.signup_screen_login),
                 color = colorResource(R.color.light_blue),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

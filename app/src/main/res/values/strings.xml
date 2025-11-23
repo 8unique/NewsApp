@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">News app</string>
+
     <string name="bottombar_nav_home">Home</string>
     <string name="bottombar_nav_favourite">Favourite</string>
     <string name="bottombar_nav_profile">Profile</string>
+
+    <string name="signup_screen_already_have_an_account">Already have an account? </string>
+    <string name="signup_screen_login">Login</string>
+    <string name="signup_screen_signup">Sign Up</string>
+    <string name="signup_screen_confirm_password">Confirm Password</string>
+    <string name="signup_screen_password">Password</string>
+    <string name="signup_screen_email">Email</string>
+    <string name="signup_screen_last_name">Last Name</string>
+    <string name="signup_screen_first_name">First Name</string>
+    <string name="signup_screen_back">Back</string>
 </resources>
