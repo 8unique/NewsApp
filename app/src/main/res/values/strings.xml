@@ -14,4 +14,43 @@
     <string name="signup_screen_last_name">Last Name</string>
     <string name="signup_screen_first_name">First Name</string>
     <string name="signup_screen_back">Back</string>
+
+    <string name="article_screen_back">Back</string>
+    <string name="article_screen_remove_from_fav">Remove from favorites</string>
+    <string name="article_screen_add_to_fav">Add to favorites</string>
+
+    <string name="favourites_screen_back">Back</string>
+    <string name="favourites_screen_fav">Favourites</string>
+    <string name="favourites_screen_show_less">Show Less</string>
+    <string name="favourites_screen_read_more">Read More</string>
+    <string name="favourites_screen_no_desc">No description available</string>
+    <string name="favourites_screen_start_add_to_fav">Start adding articles to your favorites!</string>
+    <string name="favourites_screen_no_articles_yet">No favorite articles yet</string>
+
+
+    <string name="home_screen_search">Search</string>
+    <string name="home_screen_latest_news">Latest News</string>
+    <string name="home_screen_see_all">See All</string>
+    <string name="home_screen_unknown_err">Unknown error</string>
+    <string name="home_screen_unknown">Unknown</string>
+
+
+    <string name="login_screen_email">Email</string>
+    <string name="login_screen_password">Password</string>
+    <string name="login_screen_login">Login</string>
+    <string name="login_screen_do_not_have_an_account">Do not have an account? </string>
+    <string name="login_screen_signup">Sign Up</string>
+
+
+    <string name="profile_screen_first_name">First Name</string>
+    <string name="profile_screen_last_name">Last Name</string>
+    <string name="profile_screen_email">Email</string>
+    <string name="profile_screen_profile">Profile</string>
+
+
+
+
+
+
+
 </resources>

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,7 +82,7 @@ fun ArticleScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
-                                contentDescription = "Back",
+                                contentDescription = stringResource(R.string.article_screen_back),
                                 tint = Color.White
                             )
                         }
@@ -165,13 +166,6 @@ fun ArticleScreen(
                                 modifier = Modifier.padding(bottom = 16.dp)
                             )
                         }
-
-                        Text(
-                            text = "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.",
-                            color = colorResource(R.color.text_color),
-                            fontSize = 16.sp,
-                            lineHeight = 24.sp
-                        )
                     }
                 }
 
@@ -197,9 +191,9 @@ fun ArticleScreen(
                         else
                             Icons.Outlined.FavoriteBorder,
                         contentDescription = if (isFavorite)
-                            "Remove from favorites"
+                            stringResource(R.string.article_screen_remove_from_fav)
                         else
-                            "Add to favorites",
+                            stringResource(R.string.article_screen_add_to_fav),
                         tint = if (isFavorite)
                             Color.White
                         else

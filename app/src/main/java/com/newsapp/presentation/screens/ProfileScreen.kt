@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -74,7 +75,7 @@ fun ProfileScreen(
                     .padding(bottom = 20.dp)
             ) {
                 Text(
-                    text = "Profile",
+                    text = stringResource(R.string.profile_screen_profile),
                     color = colorResource(R.color.light_blue),
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
@@ -92,17 +93,17 @@ fun ProfileScreen(
 
             FloatingLabelText(
                 value = firstName,
-                label = "First Name"
+                label = stringResource(R.string.profile_screen_first_name)
             )
 
             FloatingLabelText(
                 value = lastName,
-                label = "Last Name"
+                label = stringResource(R.string.profile_screen_last_name)
             )
 
             FloatingLabelText(
                 value = email,
-                label = "Email"
+                label = stringResource(R.string.profile_screen_email)
             )
         }
 

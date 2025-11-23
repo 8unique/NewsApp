@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -96,7 +97,7 @@ fun LoginScreen(
                     email = it
                     if (it.isNotBlank()) emailError = false
                 },
-                label = "Email",
+                label = stringResource(R.string.login_screen_email),
                 isError = emailError,
                 isPassword = false,
                 focusRequester = emailFocus
@@ -108,7 +109,7 @@ fun LoginScreen(
                     password = it
                     if (it.isNotBlank()) passwordError = false
                 },
-                label = "Password",
+                label = stringResource(R.string.login_screen_password),
                 isError = passwordError,
                 isPassword = true,
                 focusRequester = passwordFocus
@@ -139,7 +140,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        text = "Login",
+                        text = stringResource(R.string.login_screen_login),
                         style = TextStyle(fontSize = 16.sp),
                         color = colorResource(R.color.text_color2)
                     )
@@ -165,12 +166,12 @@ fun LoginScreen(
                 .padding(bottom = 40.dp)
         ) {
             Text(
-                text = "Do not have an account? ",
+                text = stringResource(R.string.login_screen_do_not_have_an_account),
                 color = colorResource(R.color.text_color),
                 fontSize = 14.sp
             )
             Text(
-                text = "Sign Up",
+                text = stringResource(R.string.login_screen_signup),
                 color = colorResource(R.color.light_blue),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,

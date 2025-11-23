@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -108,7 +109,7 @@ fun HomeScreen(
                                 viewModel.searchNews(it)
                             }
                         },
-                        label = "Search",
+                        label = stringResource(R.string.home_screen_search),
                         focusRequester = searchFocus,
                         modifier = Modifier.padding(top = 50.dp)
                     )
@@ -124,7 +125,7 @@ fun HomeScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Latest News",
+                            text = stringResource(R.string.home_screen_latest_news),
                             color = colorResource(R.color.text_color3),
                             fontWeight = FontWeight.Bold,
                             fontSize = 32.sp
@@ -135,7 +136,7 @@ fun HomeScreen(
                             modifier = Modifier.clickable { }
                         ) {
                             Text(
-                                text = "See All",
+                                text = stringResource(R.string.home_screen_see_all),
                                 color = colorResource(R.color.text_color),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp
@@ -193,7 +194,7 @@ fun HomeScreen(
                 if (uiState.error != null) {
                     item {
                         Text(
-                            text = uiState.error ?: "Unknown error",
+                            text = uiState.error ?: stringResource(R.string.home_screen_unknown_err),
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.padding(16.dp)
                         )
@@ -272,7 +273,7 @@ fun SearchField(
 
             Icon(
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search",
+                contentDescription = stringResource(R.string.home_screen_search),
                 tint = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.size(20.dp)
             )
@@ -382,7 +383,7 @@ fun NewsArticleCard(
                     )
 
                     Text(
-                        text = article.author ?: "Unknown",
+                        text = article.author ?: stringResource(R.string.home_screen_unknown),
                         color = Color.White,
                         fontSize = 14.sp
                     )

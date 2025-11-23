@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -63,7 +64,7 @@ fun FavouritesScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.favourites_screen_back),
                         tint = colorResource(R.color.text_color),
                         modifier = Modifier
                             .size(24.dp)
@@ -71,7 +72,7 @@ fun FavouritesScreen(
                     )
 
                     Text(
-                        text = "Favourites",
+                        text = stringResource(R.string.favourites_screen_fav),
                         color = colorResource(R.color.light_blue),
                         fontWeight = FontWeight.Bold,
                         fontSize = 32.sp
@@ -93,13 +94,13 @@ fun FavouritesScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
-                                text = "No favorite articles yet",
+                                text = stringResource(R.string.favourites_screen_no_articles_yet),
                                 color = colorResource(R.color.text_color),
                                 fontSize = 16.sp,
                                 modifier = Modifier.padding(bottom = 8.dp)
                             )
                             Text(
-                                text = "Start adding articles to your favorites!",
+                                text = stringResource(R.string.favourites_screen_start_add_to_fav),
                                 color = colorResource(R.color.text_color2),
                                 fontSize = 14.sp
                             )
@@ -140,7 +141,7 @@ fun FavoriteArticleItem(
     var expanded by remember { mutableStateOf(false) }
     val maxChars = 150
 
-    val description = article.description ?: article.content ?: "No description available"
+    val description = article.description ?: article.content ?: stringResource(R.string.favourites_screen_no_desc)
 
     val displayText = if (expanded) {
         buildAnnotatedString {
@@ -148,7 +149,7 @@ fun FavoriteArticleItem(
             append(" ")
             pushStringAnnotation(tag = "SHOW_LESS", annotation = "show_less")
             withStyle(style = SpanStyle(color = Color(0xFF00BCD4))) {
-                append("Show Less")
+                append(stringResource(R.string.favourites_screen_show_less))
             }
             pop()
         }
@@ -165,7 +166,7 @@ fun FavoriteArticleItem(
                 append(" ")
                 pushStringAnnotation(tag = "READ_MORE", annotation = "read_more")
                 withStyle(style = SpanStyle(color = Color(0xFF00BCD4))) {
-                    append("Read More")
+                    append(stringResource(R.string.favourites_screen_read_more))
                 }
                 pop()
             }
